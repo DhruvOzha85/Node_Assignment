@@ -9,4 +9,5 @@ router.get("/",getAllNotes);
 router.get("/:id",getNotesById);
 router.put("/:id",updateNote);
 router.patch('/:id', updateNotePartial);
+router.delete('/:id', deleteNote);
 module.exports = router;
