@@ -80,4 +80,27 @@ const updateNote = async (req,res) => {
         return res.status(500).json({err : err.message});
     }
 };
+const updateNotePartial = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const updatedNote = await Note.findByIdAndUpdate(
+      id,
+      { $set: req.body },   
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedNote) {
+      return res.status(404).json({ message: "Note not found" });
+    }
+
+    res.status(200).json({
+      message: "Note updated successfully",
+      data: updatedNote
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 module.exports = {createNote,createNotesBulk,getAllNotes,getNotesById,updateNote};
