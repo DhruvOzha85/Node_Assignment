@@ -64,3 +64,20 @@ const getNotesById = async(req,res) => {
         res.status(500).json({error : err.message});
     }
 };
+const updateNote = async (req,res) => {
+    try{
+        const updatedNote = await Note.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            {new :true,overwrite : true}
+        );
+        if(!updatedNote){
+            return res.status(400).json({message : "Not found"});
+        }
+        res.json(updatedNote);
+    }
+    catch(err){
+        return res.status(500).json({err : err.message});
+    }
+};
+module.exports = {createNote,createNotesBulk,getAllNotes,getNotesById,updateNote};
