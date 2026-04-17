@@ -122,4 +122,21 @@ const deleteNote = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+const deleteNotesBulk = async (req, res) => {
+  try {
+    const ids = req.body.ids;
+
+    const result = await Note.deleteMany({
+      _id: { $in: ids }
+    });
+
+    res.json({
+      message: "Deleted successfully",
+      deletedCount: result.deletedCount
+    });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 module.exports = {createNote,createNotesBulk,getAllNotes,getNotesById,updateNote};
