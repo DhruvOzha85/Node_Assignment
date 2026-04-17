@@ -30,3 +30,14 @@ const createNote = async (req, res) => {
         });
     }
 };
+const createNotesBulk = async (req,res) => {
+    try{
+        const notes = req.body.notes;
+        const result = await Note.insertMany(notes);
+        res.status(201).json(result);
+
+    }
+    catch(err) {
+        res.status(500).json({error : err.message});
+    }
+};

@@ -4,5 +4,5 @@ const {createNote,createNotesBulk,getAllNotes, getNotesById} = require("../contr
 const router = express.Router();
 
 router.post("/", createNote);
-
+router.post("/bulk",createNotesBulk);
 module.exports = router;
