@@ -5,4 +5,5 @@ const router = express.Router();
 
 router.post("/", createNote);
 router.post("/bulk",createNotesBulk);
+router.get("/",getAllNotes);
 module.exports = router;

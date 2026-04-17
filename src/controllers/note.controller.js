@@ -41,3 +41,14 @@ const createNotesBulk = async (req,res) => {
         res.status(500).json({error : err.message});
     }
 };
+const getAllNotes = async(req,res) => {
+    try{
+       const notes =  await Note.find();
+       return res.status(200).json(notes);
+    }
+    catch(error){
+        return res.status(404).json({
+            error: error.message
+        })
+    }
+};
