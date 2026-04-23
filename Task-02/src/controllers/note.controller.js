@@ -518,6 +518,34 @@ const getFilteredPinnedNotes = async (req, res) => {
   }
 };
 
+// @desc    Get counts of notes by category
+// @route   GET /api/notes/filter/category
+// @access  Public
+const getFilteredCategoryStats = async (req, res) => {
+  try {
+    const stats = await Note.aggregate([
+      {
+        $group: {
+          _id: "$category",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      message: "Category statistics retrieved successfully",
+      data: stats,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: null,
+    });
+  }
+};
+
 module.exports = {
   createNote,
   createBulkNotes,
@@ -532,4 +560,5 @@ module.exports = {
   getNoteSummary,
   filterNotes,
   getFilteredPinnedNotes,
+  getFilteredCategoryStats,
 };
