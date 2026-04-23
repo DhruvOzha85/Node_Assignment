@@ -17,6 +17,7 @@ const {
   getFilteredCategoryStats,
   getFilteredNotesByDateRange,
   paginateNotes,
+  paginateNotesByCategory,
 } = require("../controllers/note.controller");
 
 // @route   POST /api/notes/bulk
@@ -42,6 +43,9 @@ router.get("/filter/date-range", getFilteredNotesByDateRange);
 
 // @route   GET /api/notes/filter
 router.get("/filter", filterNotes);
+
+// @route   GET /api/notes/paginate/category/:category
+router.get("/paginate/category/:category", paginateNotesByCategory);
 
 // @route   GET /api/notes/paginate
 router.get("/paginate", paginateNotes);

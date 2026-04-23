@@ -632,6 +632,57 @@ const paginateNotes = async (req, res) => {
   }
 };
 
+// @desc    Get paginated notes by category
+// @route   GET /api/notes/paginate/category/:category
+// @access  Public
+const paginateNotesByCategory = async (req, res) => {
+  try {
+    const { category } = req.params;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    // Validate category enum
+    const validCategories = ["work", "personal", "study"];
+    if (!validCategories.includes(category)) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid category. Must be one of: ${validCategories.join(
+          ", "
+        )}`,
+        data: null,
+      });
+    }
+
+    const notes = await Note.find({ category })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Note.countDocuments({ category });
+
+    res.status(200).json({
+      success: true,
+      message: `Page ${page} of notes for category '${category}' retrieved`,
+      data: {
+        notes,
+        pagination: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+        },
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: null,
+    });
+  }
+};
+
 module.exports = {
   createNote,
   createBulkNotes,
@@ -649,4 +700,5 @@ module.exports = {
   getFilteredCategoryStats,
   getFilteredNotesByDateRange,
   paginateNotes,
+  paginateNotesByCategory,
 };
