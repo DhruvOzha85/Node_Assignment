@@ -8,6 +8,7 @@ const {
   updateNote,
   patchNote,
   deleteNote,
+  deleteBulkNotes,
 } = require("../controllers/note.controller");
 
 // @route   POST /api/notes/bulk
@@ -18,6 +19,9 @@ router.post("/", createNote);
 
 // @route   GET /api/notes
 router.get("/", getAllNotes);
+
+// @route   DELETE /api/notes/bulk
+router.delete("/bulk", deleteBulkNotes);
 
 // @route   GET /api/notes/:id
 router.get("/:id", getNoteById);
