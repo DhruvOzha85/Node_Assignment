@@ -7,6 +7,7 @@ const {
   getNoteById,
   updateNote,
   patchNote,
+  deleteNote,
 } = require("../controllers/note.controller");
 
 // @route   POST /api/notes/bulk
@@ -26,5 +27,8 @@ router.put("/:id", updateNote);
 
 // @route   PATCH /api/notes/:id
 router.patch("/:id", patchNote);
+
+// @route   DELETE /api/notes/:id
+router.delete("/:id", deleteNote);
 
 module.exports = router;
