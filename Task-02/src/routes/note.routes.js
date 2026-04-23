@@ -13,6 +13,7 @@ const {
   getNotesByStatus,
   getNoteSummary,
   filterNotes,
+  getFilteredPinnedNotes,
 } = require("../controllers/note.controller");
 
 // @route   POST /api/notes/bulk
@@ -26,6 +27,9 @@ router.get("/", getAllNotes);
 
 // @route   DELETE /api/notes/bulk
 router.delete("/bulk", deleteBulkNotes);
+
+// @route   GET /api/notes/filter/pinned
+router.get("/filter/pinned", getFilteredPinnedNotes);
 
 // @route   GET /api/notes/filter
 router.get("/filter", filterNotes);
