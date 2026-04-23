@@ -370,6 +370,40 @@ const getNotesByCategory = async (req, res) => {
   }
 };
 
+// @desc    Get notes by pinned status
+// @route   GET /api/notes/status/:isPinned
+// @access  Public
+const getNotesByStatus = async (req, res) => {
+  try {
+    let { isPinned } = req.params;
+
+    // Convert string to boolean
+    if (isPinned === "true") isPinned = true;
+    else if (isPinned === "false") isPinned = false;
+    else {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid status. Use 'true' or 'false'",
+        data: null,
+      });
+    }
+
+    const notes = await Note.find({ isPinned }).sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      message: `Notes with isPinned=${isPinned} retrieved successfully`,
+      data: notes,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: null,
+    });
+  }
+};
+
 module.exports = {
   createNote,
   createBulkNotes,
@@ -380,4 +414,5 @@ module.exports = {
   deleteNote,
   deleteBulkNotes,
   getNotesByCategory,
+  getNotesByStatus,
 };

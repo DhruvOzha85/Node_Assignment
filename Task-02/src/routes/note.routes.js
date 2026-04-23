@@ -10,6 +10,7 @@ const {
   deleteNote,
   deleteBulkNotes,
   getNotesByCategory,
+  getNotesByStatus,
 } = require("../controllers/note.controller");
 
 // @route   POST /api/notes/bulk
@@ -26,6 +27,9 @@ router.delete("/bulk", deleteBulkNotes);
 
 // @route   GET /api/notes/category/:category
 router.get("/category/:category", getNotesByCategory);
+
+// @route   GET /api/notes/status/:isPinned
+router.get("/status/:isPinned", getNotesByStatus);
 
 // @route   GET /api/notes/:id
 router.get("/:id", getNoteById);
