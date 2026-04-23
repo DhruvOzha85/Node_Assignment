@@ -145,9 +145,65 @@ const getNoteById = async (req, res) => {
   }
 };
 
+// @desc    Update a note (full replacement)
+// @route   PUT /api/notes/:id
+// @access  Public
+const updateNote = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Validate ObjectId
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid note ID format",
+        data: null,
+      });
+    }
+
+    const { title, content, category, isPinned } = req.body;
+
+    // PUT requires all fields
+    if (!title || !content) {
+      return res.status(400).json({
+        success: false,
+        message: "Title and content are required for full update",
+        data: null,
+      });
+    }
+
+    const note = await Note.findByIdAndUpdate(
+      id,
+      { title, content, category, isPinned },
+      { new: true, runValidators: true }
+    );
+
+    if (!note) {
+      return res.status(404).json({
+        success: false,
+        message: "Note not found",
+        data: null,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Note updated successfully",
+      data: note,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: null,
+    });
+  }
+};
+
 module.exports = {
   createNote,
   createBulkNotes,
   getAllNotes,
   getNoteById,
+  updateNote,
 };

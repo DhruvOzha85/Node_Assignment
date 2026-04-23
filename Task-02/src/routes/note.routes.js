@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { createNote, createBulkNotes, getAllNotes, getNoteById } = require("../controllers/note.controller");
+const { createNote, createBulkNotes, getAllNotes, getNoteById, updateNote } = require("../controllers/note.controller");
 
 // @route   POST /api/notes/bulk
 router.post("/bulk", createBulkNotes);
@@ -13,5 +13,8 @@ router.get("/", getAllNotes);
 
 // @route   GET /api/notes/:id
 router.get("/:id", getNoteById);
+
+// @route   PUT /api/notes/:id
+router.put("/:id", updateNote);
 
 module.exports = router;
