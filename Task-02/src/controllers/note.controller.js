@@ -335,6 +335,41 @@ const deleteBulkNotes = async (req, res) => {
   }
 };
 
+// @desc    Get notes by category
+// @route   GET /api/notes/category/:category
+// @access  Public
+const getNotesByCategory = async (req, res) => {
+  try {
+    const { category } = req.params;
+
+    // Validate category enum
+    const validCategories = ["work", "personal", "study"];
+    if (!validCategories.includes(category)) {
+      return res.status(400).json({
+        success: false,
+        message: `Invalid category. Must be one of: ${validCategories.join(
+          ", "
+        )}`,
+        data: null,
+      });
+    }
+
+    const notes = await Note.find({ category }).sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      message: `Notes for category '${category}' retrieved successfully`,
+      data: notes,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: null,
+    });
+  }
+};
+
 module.exports = {
   createNote,
   createBulkNotes,
@@ -344,4 +379,5 @@ module.exports = {
   patchNote,
   deleteNote,
   deleteBulkNotes,
+  getNotesByCategory,
 };
