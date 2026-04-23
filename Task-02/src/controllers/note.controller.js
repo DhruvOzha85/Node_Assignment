@@ -594,6 +594,44 @@ const getFilteredNotesByDateRange = async (req, res) => {
   }
 };
 
+// @desc    Get paginated notes
+// @route   GET /api/notes/paginate
+// @access  Public
+const paginateNotes = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const notes = await Note.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Note.countDocuments();
+
+    res.status(200).json({
+      success: true,
+      message: `Page ${page} of notes retrieved`,
+      data: {
+        notes,
+        pagination: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+        },
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: null,
+    });
+  }
+};
+
 module.exports = {
   createNote,
   createBulkNotes,
@@ -610,4 +648,5 @@ module.exports = {
   getFilteredPinnedNotes,
   getFilteredCategoryStats,
   getFilteredNotesByDateRange,
+  paginateNotes,
 };
