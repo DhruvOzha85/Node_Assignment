@@ -15,6 +15,7 @@ const {
   filterNotes,
   getFilteredPinnedNotes,
   getFilteredCategoryStats,
+  getFilteredNotesByDateRange,
 } = require("../controllers/note.controller");
 
 // @route   POST /api/notes/bulk
@@ -34,6 +35,9 @@ router.get("/filter/pinned", getFilteredPinnedNotes);
 
 // @route   GET /api/notes/filter/category
 router.get("/filter/category", getFilteredCategoryStats);
+
+// @route   GET /api/notes/filter/date-range
+router.get("/filter/date-range", getFilteredNotesByDateRange);
 
 // @route   GET /api/notes/filter
 router.get("/filter", filterNotes);
