@@ -12,6 +12,7 @@ const {
   getNotesByCategory,
   getNotesByStatus,
   getNoteSummary,
+  filterNotes,
 } = require("../controllers/note.controller");
 
 // @route   POST /api/notes/bulk
@@ -25,6 +26,9 @@ router.get("/", getAllNotes);
 
 // @route   DELETE /api/notes/bulk
 router.delete("/bulk", deleteBulkNotes);
+
+// @route   GET /api/notes/filter
+router.get("/filter", filterNotes);
 
 // @route   GET /api/notes/category/:category
 router.get("/category/:category", getNotesByCategory);

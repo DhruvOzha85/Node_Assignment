@@ -457,6 +457,46 @@ const getNoteSummary = async (req, res) => {
   }
 };
 
+// @desc    Filter notes by multiple criteria
+// @route   GET /api/notes/filter
+// @access  Public
+const filterNotes = async (req, res) => {
+  try {
+    const { category, isPinned, title } = req.query;
+    const filter = {};
+
+    if (category) {
+      const validCategories = ["work", "personal", "study"];
+      if (validCategories.includes(category)) {
+        filter.category = category;
+      }
+    }
+
+    if (isPinned !== undefined) {
+      if (isPinned === "true") filter.isPinned = true;
+      else if (isPinned === "false") filter.isPinned = false;
+    }
+
+    if (title) {
+      filter.title = { $regex: title, $options: "i" }; // Case-insensitive search
+    }
+
+    const notes = await Note.find(filter).sort({ createdAt: -1 });
+
+    res.status(200).json({
+      success: true,
+      message: `${notes.length} notes found matching criteria`,
+      data: notes,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: null,
+    });
+  }
+};
+
 module.exports = {
   createNote,
   createBulkNotes,
@@ -469,4 +509,5 @@ module.exports = {
   getNotesByCategory,
   getNotesByStatus,
   getNoteSummary,
+  filterNotes,
 };
