@@ -19,6 +19,7 @@ const {
   paginateNotes,
   paginateNotesByCategory,
   sortNotes,
+  sortPinnedNotes,
 } = require("../controllers/note.controller");
 
 // @route   POST /api/notes/bulk
@@ -50,6 +51,9 @@ router.get("/paginate/category/:category", paginateNotesByCategory);
 
 // @route   GET /api/notes/paginate
 router.get("/paginate", paginateNotes);
+
+// @route   GET /api/notes/sort/pinned
+router.get("/sort/pinned", sortPinnedNotes);
 
 // @route   GET /api/notes/sort
 router.get("/sort", sortNotes);

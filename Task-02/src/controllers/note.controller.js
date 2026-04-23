@@ -721,6 +721,34 @@ const sortNotes = async (req, res) => {
   }
 };
 
+// @desc    Get sorted pinned notes
+// @route   GET /api/notes/sort/pinned
+// @access  Public
+const sortPinnedNotes = async (req, res) => {
+  try {
+    const { order = "desc" } = req.query;
+    const sortOrder = order === "asc" ? 1 : -1;
+
+    const notes = await Note.find({ isPinned: true }).sort({
+      createdAt: sortOrder,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: `Pinned notes sorted by createdAt in ${
+        order === "asc" ? "ascending" : "descending"
+      } order`,
+      data: notes,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: null,
+    });
+  }
+};
+
 module.exports = {
   createNote,
   createBulkNotes,
@@ -740,4 +768,5 @@ module.exports = {
   paginateNotes,
   paginateNotesByCategory,
   sortNotes,
+  sortPinnedNotes,
 };
