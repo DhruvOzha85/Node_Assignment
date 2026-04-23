@@ -404,6 +404,59 @@ const getNotesByStatus = async (req, res) => {
   }
 };
 
+// @desc    Get summary of a note
+// @route   GET /api/notes/:id/summary
+// @access  Public
+const getNoteSummary = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Validate ObjectId
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid note ID format",
+        data: null,
+      });
+    }
+
+    const note = await Note.findById(id);
+
+    if (!note) {
+      return res.status(404).json({
+        success: false,
+        message: "Note not found",
+        data: null,
+      });
+    }
+
+    // Create summary (e.g., first 50 characters of content)
+    const summary =
+      note.content.length > 50
+        ? note.content.substring(0, 50) + "..."
+        : note.content;
+
+    res.status(200).json({
+      success: true,
+      message: "Note summary generated successfully",
+      data: {
+        id: note._id,
+        title: note.title,
+        summary: summary,
+        category: note.category,
+        isPinned: note.isPinned,
+        createdAt: note.createdAt,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: null,
+    });
+  }
+};
+
 module.exports = {
   createNote,
   createBulkNotes,
@@ -415,4 +468,5 @@ module.exports = {
   deleteBulkNotes,
   getNotesByCategory,
   getNotesByStatus,
+  getNoteSummary,
 };
