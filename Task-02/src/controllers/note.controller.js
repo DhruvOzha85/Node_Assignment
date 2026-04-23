@@ -1,4 +1,8 @@
 const Note = require("../models/note.model");
+const mongoose = require("mongoose");
+
+// Helper: Validate ObjectId
+const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
 // @desc    Create a new note
 // @route   POST /api/notes
@@ -101,8 +105,49 @@ const getAllNotes = async (req, res) => {
   }
 };
 
+// @desc    Get a single note by ID
+// @route   GET /api/notes/:id
+// @access  Public
+const getNoteById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Validate ObjectId
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid note ID format",
+        data: null,
+      });
+    }
+
+    const note = await Note.findById(id);
+
+    if (!note) {
+      return res.status(404).json({
+        success: false,
+        message: "Note not found",
+        data: null,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Note retrieved successfully",
+      data: note,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+      data: null,
+    });
+  }
+};
+
 module.exports = {
   createNote,
   createBulkNotes,
   getAllNotes,
+  getNoteById,
 };
